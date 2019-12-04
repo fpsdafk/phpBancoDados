@@ -50,8 +50,13 @@ class Especialidade
             $stman->bindParam(":valor", $this->valor_dia);
             $stman->execute();
             aviso("Cadastrado!");
-        } catch (Exception $e) {
-            erro("Erro ao cadastrar! " . $e->getMessage());
+        } catch (PDOException $e) {
+            
+            if($e->getCod === 23000()){
+                erro("dados ja cadastrados!");
+            }else{
+                erro("erro ao cadastrar! " . $e->getMessage());
+            }
         }
     }
 

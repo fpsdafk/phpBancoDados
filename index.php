@@ -22,7 +22,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Pacientes</a>
+                        <a class="nav-link" href="index.php?p=paciente">Pacientes</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Usuarios</a>
@@ -73,13 +73,15 @@
             include("pages/add-endereco.php");
         if ($_GET['p'] == "especialidade")
             include("pages/add-especialidade.php");
+        if ($_GET['p'] == "paciente")
+            include("pages/add-paciente.php");
     } else {
         include("pages/home.php");
     }
     ?>
 
     <footer class="mt-2 p-3 bg-dark text-light text-center fixed-bottom">
-        <p>feito por <a href="https://fabianomoreira.blogspot.com">Fabiano Moreira</a></p>
+        <p>feito por <a href="https://davidmeirellesrj@gmail.com">FPSDafK</a></p>
     </footer>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
     </script>
