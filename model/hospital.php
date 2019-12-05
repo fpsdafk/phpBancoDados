@@ -1,55 +1,63 @@
 <?php
-require_once("especialidade.php");
+require_once("endereco.php");
 
-class Ala
+class Hospital
 {
-    private $id_ala;
-    private $hospital;
-    private $especialidade;
+    private $id_hospital;
+    private $endereco;
     private $nome;
-    private $quant_leitos;
+    private $numero;
+    private $complemento;
     private $ativo;
-
 
     public function __construct()
     {
-        $this->especialidade = new Especialidade;
-        $this->hospital = new Especialidade;
-        $this->quant_leitos = 1;
+        $this->endereco = new Endereco;
         $this->ativo = true;
     }
 
     // GETs e SETs ---------------------------------------------
-    public function getId_ala()
+    public function getId_hospital()
     {
-        return $this->id_ala;
+        return $this->id_hospital;
     }
 
-    public function setId_ala($id_ala)
+    public function setId_hospital($id_hospital)
     {
-        $this->id_ala = $id_ala;
+        $this->id_hospital = $id_hospital;
         return $this;
     }
 
-    public function getEspecialidade()
+    public function getEndereco()
     {
-        return $this->especialidade;
+        return $this->endereco;
     }
 
-    public function setEspecialidade(Especialidade $especialidade)
+    public function setEndereco(Endereco $endereco)
     {
-        $this->especialidade = $especialidade;
+        $this->endereco = $endereco;
         return $this;
     }
 
-    public function getQuant_leitos()
+    public function getNumero()
     {
-        return $this->quant_leitos;
+        return $this->numero;
     }
 
-    public function setQuant_leitos($quant_leitos)
+    public function setNumero($numero)
     {
-        $this->quant_leitos = $quant_leitos;
+        $this->numero = $numero;
+        return $this;
+    }
+
+    public function getComplemento()
+    {
+        return $this->complemento;
+    }
+
+    public function setComplemento($complemento)
+    {
+        $this->complemento = $complemento;
         return $this;
     }
 
@@ -64,43 +72,21 @@ class Ala
         return $this;
     }
 
-    public function getHospital()
-    {
-        return $this->hospital;
-    }
-
-    public function setHospital( Hospital $hospital)
-    {
-        $this->hospital = $hospital;
-        return $this;
-    }
-
-    public function getAtivo()
-    {
-        return $this->ativo;
-    }
-
-    public function setAtivo($ativo)
-    {
-        $this->ativo = $ativo;
-        return $this;
-    }
-
-
     // CRUD -------------------------------------------------
     function add()
     {
         try {
             $sql = "
-            insert into ala (fk_id_hospital,fk_id_especialidade,quant_leitos) 
-            values (:id_hospital, :id_especialidade, :leitos);
+            INSERT INTO hospital (id_hospital, nome, fk_cep, numero, complemento) 
+            VALUES (NULL, :nome, :endereco, :numero, :complemento);
             ";
             require_once("dao.php");
             $dao = new Dao;
             $stman = $dao->conecta()->prepare($sql);
-            $stman->bindParam(":especialidade", $this->nome);
-            $stman->bindParam(":valor", $this->valor_dia);
-            $stman->execute();
+            $stman->bindParam(":nome", $this->nome);
+            $stman->bindParam(":endereco", $this->endereco->cep);
+            $stman->bindParam(":numero", $this->numero);
+            $stman->bindParam(":complemento", $this->complemento);
             $stman->execute();
             aviso("Cadastrado!");
         } catch (PDOException $e) {
@@ -117,7 +103,7 @@ class Ala
     {
         $result = null;
         try {
-            $sql = "select * from ala";
+            $sql = "select * from hospital";
             require_once("dao.php");
             $dao = new Dao;
             $stman = $dao->conecta()->prepare($sql);
@@ -134,7 +120,7 @@ class Ala
     {
         $result = null;
         try {
-            $sql = "select * from ala a where a.id_ala = :id;";
+            $sql = "select * from hospital h where h.id_hospital = :id;";
             require_once("dao.php");
             $dao = new Dao;
             $stman = $dao->conecta()->prepare($sql);
@@ -142,7 +128,7 @@ class Ala
             $stman->execute();
             $result = $stman->fetchAll(PDO::FETCH_OBJ);
         } catch (Exception $e) {
-            erro("Erro ao listar a ala! " . $e->getMessage());
+            erro("Erro ao listar a hospital! " . $e->getMessage());
         }
         return $result;
     }
@@ -153,18 +139,17 @@ class Ala
         $result = null;
         try {
             $sql = "
-            UPDATE ala a SET
-            fk_id_especialidade = :especialidade,
-            fk_id_hospital = :hospital,
+            UPDATE hospital h SET
             nome = :nome,
-            quant_leitos = :leitos,
+            fk_cep = :endereco,
+            numero = :numero,
+            complemento = :complemento,
             ativo = :ativo
-            WHERE a.id_ala = :id;";
-
+            WHERE h.id_hospital = :id;";
             require_once("dao.php");
             $dao = new Dao;
             $stman = $dao->conecta()->prepare($sql);
-            $stman->bindParam(":id", $this->id_ala);
+            $stman->bindParam(":id", $this->id_hospital);
             $stman->bindParam(":especialidade", $this->especialidade->id_especialidade);
             $stman->bindParam(":hospital", $this->hospital->id_hospital);
             $stman->bindParam(":nome", $this->nome);
@@ -173,7 +158,7 @@ class Ala
             $stman->execute();
             $result = $stman->fetchAll(PDO::FETCH_OBJ);
         } catch (Exception $e) {
-            erro("Erro ao Atualizar! " . $e->getMessage());
+            erro("Erro ao atualizar! " . $e->getMessage());
         }
         return $result;
     }
@@ -184,9 +169,9 @@ class Ala
         $result = null;
         try {
             $sql = "
-            UPDATE ala SET
+            UPDATE hospital SET
             ativo = :ativo
-            WHERE ala.id_ala = :id";
+            WHERE hospital.id_hospital = :id";
 
             require_once("dao.php");
             $dao = new Dao;
@@ -200,11 +185,12 @@ class Ala
         }
         return $result;
     }
-}
 
+}
    // START TRANSACTION;
-    // insert into ala 
-    // (ala.fk_id_hospital,ala.fk_id_especialidade, ala.nome, ala.quant_leitos) 
+    // insert into hospital 
+    // (hospital.fk_id_hospital,hospital.fk_id_especialidade, hospital.nome, ala.quant_leitos) 
     // values (1, 1, "B", 123);
     // COMMIT;
     // #ROLLBACK;
+    // INSERT INTO `hospital` (`id_hospital`, `nome`, `fk_cep`, `numero`, `complemento`) VALUES (NULL, 'Hospital Geral', '23520-120', '34', NULL);
