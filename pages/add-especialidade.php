@@ -10,12 +10,13 @@ if (!empty($_POST)) {
 
 if (!empty($_GET['acao'])) {
     if ($_GET['acao'] == "remover") {
-        var_dump($_GET);
+        //var_dump($_GET);
         if ($_GET['dados'])
             $ativo = 0;
         else
             $ativo = 1;
         $especialidade->remove($_GET['id'], $ativo);
+        //$especialidade->remove($_GET['id'], !$_GET['dados']);
         header("Location: index.php?p=especialidade");
     }
 }
@@ -49,7 +50,7 @@ if (!empty($_GET['acao'])) {
         <?php
         require_once("./model/especialidade.php");
         $especialidade = new Especialidade;
-        foreach ($especialidade->listAll() as $esp) {
+        foreach ($especialidade->listAll(true) as $esp) {
             echo "
                 <tr>
                     <td> $esp->id_especialidade </td>

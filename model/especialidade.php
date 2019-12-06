@@ -74,11 +74,12 @@ class Especialidade
         }
     }
 
-    function listAll()
+    function listAll($ativo)
     {
         $result = null;
         try {
             $sql = "select * from especialidade";
+            if($ativo) $sql.= "where ativo = true";
             require_once("dao.php");
             $dao = new Dao;
             $stman = $dao->conecta()->prepare($sql);
@@ -141,7 +142,7 @@ class Especialidade
             UPDATE especialidade SET
             ativo = :ativo
             WHERE especialidade.id_especialidade = :id";
-
+            //delete especialidade where especialidade.id_especialidade= :id";
             require_once("dao.php");
             $dao = new Dao;
             $stman = $dao->conecta()->prepare($sql);

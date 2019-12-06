@@ -5,7 +5,7 @@ $ala = new Ala;
 
 //var_dump($ala);
 
-if (!$ala->getEspecialidade()->listAll()) {
+if (!$ala->getEspecialidade()->listAll(false)) {
     erro("Não existem especialidade cadastradas! 
     <br>
     <a href='index.php?p=especialidade'>
@@ -51,7 +51,7 @@ if (!$ala->getEspecialidade()->listAll()) {
                 <label for="especialidade">Especialidade</label>
                 <select class="form-control" id="especialidade" name="especialidade">
                     <?php
-                        foreach ($ala->getEspecialidade()->listAll() as $e) {
+                        foreach ($ala->getEspecialidade()->listAll(false) as $e) {
                             echo "<option value='$e->id_especialidade'>$e->nome";
                         }
                         ?>
